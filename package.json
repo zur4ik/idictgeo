@@ -6,12 +6,16 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "run": "node dist/app.js"
+    "run": "node dist/app.js",
+    "lint": "npx eslint ."
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^5.4.5"
+    "@eslint/js": "^9.0.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.7.0"
   },
   "dependencies": {
     "@types/node": "^20.12.7",

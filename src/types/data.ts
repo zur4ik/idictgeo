@@ -22,8 +22,8 @@ export interface Translation {
 export interface TranslationSource {
     id: number;
     ka: string;
-    en: any;
-    de: any;
+    en: string;
+    de: string;
     status: number;
     created_at: string;
     updated_at: string;
