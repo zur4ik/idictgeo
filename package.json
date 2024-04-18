@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Georgian plugin for Apple Dictionary",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "run": "node dist/app.js"
