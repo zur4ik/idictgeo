@@ -6,7 +6,7 @@ let client: RedisClientType
 function getRedisClient(host: string, port: string) {
   if (!client) {
     client = redis.createClient({
-      url: `redis://${host}:${port}/0`
+      url: `redis://${host}:${port}/0`,
     })
     client.on('error', (err) => console.log('Redis Client Error', err))
   }
@@ -15,7 +15,7 @@ function getRedisClient(host: string, port: string) {
 
 export default async function connectRedis(
   host: string = 'localhost',
-  port: string = '6379'
+  port: string = '6379',
 ): Promise<RedisClientType> {
   const client = getRedisClient(host, port)
 
