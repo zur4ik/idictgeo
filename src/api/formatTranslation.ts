@@ -1,4 +1,4 @@
-import { TranslationItem, TranslationResponse } from '../types/data.js'
+import type { TranslationItem, TranslationResponse } from '../types/data.js'
 
 export default function formatTranslation(
   data: TranslationResponse,

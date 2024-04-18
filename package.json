@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "watch": "tsc -w",
     "build": "tsc",
     "run": "node dist/app.js",
     "lint": "npx eslint ."
@@ -21,7 +22,6 @@
   "dependencies": {
     "@types/node": "^20.12.7",
     "@types/redis": "^4.0.11",
-    "axios": "^1.6.8",
     "redis": "^4.6.13"
   },
   "prettier": {
