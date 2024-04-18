@@ -4,11 +4,17 @@
   "description": "Georgian plugin for Apple Dictionary",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "run": "node dist/app.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@types/node": "^20.12.7",
+    "@types/redis": "^4.0.11",
+    "redis": "^4.6.13"
   }
 }
