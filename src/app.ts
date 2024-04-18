@@ -4,10 +4,11 @@
 //
 // console.log(translation)
 
+// ------------------------------------------------------------
 import WorkerPool from './api/worker/WorkerPool.js'
 
 // test worker pool
-const pool = new WorkerPool(4)
+const pool = new WorkerPool()
 for (let i = 0; i < 100; i++) {
   pool.runTask(`task ${i}`)
 }

@@ -1,21 +1,28 @@
-import { parentPort, Worker } from 'worker_threads'
+import { Worker } from 'worker_threads'
 import { fileURLToPath } from 'node:url'
 import { isMainThread } from 'node:worker_threads'
 import worker from './worker.js'
+import os from 'node:os'
 
 export default class WorkerPool {
   workerPath: string
   workers: Worker[]
   freeWorkers: Worker[]
   taskQueue: string[]
+  cpuNum: number
+  workerNum: number
 
-  constructor(numberOfWorkers: number = 1) {
+  constructor(numberOfWorkers?: number) {
     this.workerPath = fileURLToPath(import.meta.url)
     this.workers = []
     this.freeWorkers = []
     this.taskQueue = []
+    this.cpuNum = os.cpus().length
+    this.workerNum = numberOfWorkers
+      ? Math.min(numberOfWorkers, this.cpuNum)
+      : this.cpuNum
 
-    for (let i = 0; i < numberOfWorkers; i++) {
+    for (let i = 0; i < this.workerNum; i++) {
       const worker = new Worker(this.workerPath)
 
       worker.on('message', (result) => this.handleMessage(worker, result))
