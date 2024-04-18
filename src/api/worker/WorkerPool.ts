@@ -1,4 +1,7 @@
-import { Worker } from 'worker_threads'
+import { parentPort, Worker } from 'worker_threads'
+import { fileURLToPath } from 'node:url'
+import { isMainThread } from 'node:worker_threads'
+import worker from './worker.js'
 
 export default class WorkerPool {
   workerPath: string
@@ -6,18 +9,14 @@ export default class WorkerPool {
   freeWorkers: Worker[]
   taskQueue: string[]
 
-  constructor(workerPath: string, numberOfWorkers: number = 1) {
-    this.workerPath = workerPath
+  constructor(numberOfWorkers: number = 1) {
+    this.workerPath = fileURLToPath(import.meta.url)
     this.workers = []
     this.freeWorkers = []
     this.taskQueue = []
 
     for (let i = 0; i < numberOfWorkers; i++) {
-      const worker = new Worker(workerPath, {
-        eval: true,
-        workerData: null,
-        execArgv: ['-r', 'ts-node/register'],
-      })
+      const worker = new Worker(this.workerPath)
 
       worker.on('message', (result) => this.handleMessage(worker, result))
       worker.on('error', (err) => console.error(`Worker error: ${err}`, err))
@@ -32,7 +31,17 @@ export default class WorkerPool {
   handleMessage(worker: Worker, result: string) {
     console.log(`Worker ${worker.threadId} finished task`, result)
     this.freeWorkers.push(worker)
-    this.next()
+
+    // check if pool finished all tasks
+    if (
+      this.taskQueue.length === 0 &&
+      this.freeWorkers.length === this.workers.length
+    ) {
+      console.log('All tasks finished')
+      this.destroy()
+    } else {
+      this.next()
+    }
   }
 
   next() {
@@ -54,6 +63,14 @@ export default class WorkerPool {
     }
   }
 
+  getPoolStatus() {
+    return {
+      workers: this.workers.length,
+      freeWorkers: this.freeWorkers.length,
+      taskQueue: this.taskQueue.length,
+    }
+  }
+
   destroy() {
     for (const worker of this.workers) {
       worker
@@ -61,4 +78,9 @@ export default class WorkerPool {
         .then(() => console.log(`Worker ${worker.threadId} terminated`))
     }
   }
+}
+
+// run worker if not in main thread
+if (!isMainThread) {
+  worker()
 }
